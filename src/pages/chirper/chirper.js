@@ -93,6 +93,43 @@ var PAGE_DATA = {
             message:
                 'With #python iterators, we think of next() as initiating execution. With coroutines, we "await" a downstream event to initiate execution.'
         }
+    ],
+    recommend: [
+        {
+            user: {
+                name: 'David Beasley',
+                userpic:
+                    'https://pbs.twimg.com/profile_images/848508178639749120/x8ltNamO_400x400.jpg',
+                username: 'dabeaz'
+            }
+        },
+
+        {
+            user: {
+                name: 'Guido van Rossum',
+                userpic:
+                    'https://pbs.twimg.com/profile_images/424495004/GuidoAvatar_400x400.jpg',
+                username: 'gvanrossum'
+            }
+        },
+
+        {
+            user: {
+                name: 'Python Software',
+                userpic:
+                    'https://pbs.twimg.com/profile_images/439154912719413248/pUBY5pVj_400x400.png',
+                username: 'ThePSF'
+            }
+        },
+
+        {
+            user: {
+                name: 'Pycoders Weekly',
+                userpic:
+                    'https://pbs.twimg.com/profile_images/429285908953579520/InZKng9-_400x400.jpeg',
+                username: 'pycoders'
+            }
+        }
     ]
 };
 function DateJoined(data) {
@@ -124,7 +161,7 @@ function ProfileInformation(data) {
         "<div class='col-lg-3' id='user-profile'>",
         "<div class='col-lg-12 col-md-12 col-sm-12' id='picture'>", ///
         "<img src='" +
-            data['user']['userpic'] +
+            hasImage(data['user']) +
             "' class='img-circle' id='userpic'>",
         '</div>',
         "<div class='col-lg-12 col-md-12 col-sm-12'><span><h3 id='name'><a id='name-color' href='https://twitter.com/" +
@@ -157,12 +194,13 @@ function ChirperFeed(data) {
     return data['chirps']
         .map(function(feed) {
             return [
-                '<div class="row"><hr><div class="col-lg-12 chirper-row"><div class="row">',
-                '<span >' +
+                '<div class="row"><hr><div class="col-lg-12"><div class="row">',
+                "<div class='col-lg-1'>" +
                     "<img class='img-circle chirper-mini-pic' src='" +
-                    data['user']['userpic'] +
+                    hasImage(data['user']) +
                     "'>",
-                '</span>',
+                '</div>',
+                "<div class='col-lg-11'>",
                 '<span class="chirper-name">' +
                     feed['author']['name'] +
                     '</span>',
@@ -173,10 +211,11 @@ function ChirperFeed(data) {
                 ' <span class="chirper-date">' +
                     MonthDateYear(feed['date']) +
                     '</span>',
-                '</div><div class="chirp">' +
+                "<div class='row' id='chirp-message'>",
+                '<span class="chirp">' +
                     hashTag(feed['message']) +
-                    '</div>',
-                '</div></div>'
+                    '</span></div>',
+                '</div></div></div></div>'
             ].join('');
         })
         .join('');
@@ -202,8 +241,33 @@ function hashTag(message) {
     }
     return phrase.join(' ');
 }
+function hasImage(data) {
+    if ('userpic' in data) {
+        return data.userpic;
+    } else {
+        return 'http://way4sale.com/oc-content/plugins/profile_picture/no-user.png';
+    }
+}
 function Recommendations(data) {
-    return [];
+    return data['recommend']
+        .map(function(feed) {
+            return [
+                "<div class='row'><div class='col-lg-12'><hr><div class='row'>",
+                '<span>',
+                "<img class='img-circle chirper-mini-pic-recommendation' src='" +
+                    feed['user']['userpic'] +
+                    "'>",
+                '</span>',
+                "<span class='chirper-name'>" +
+                    feed['user']['name'] +
+                    '</span>',
+                "<span class='chirper-username'>@" +
+                    feed['user']['username'] +
+                    '</span>',
+                '</div></div></div>'
+            ].join('');
+        })
+        .join('');
 }
 function ViewProfile(data) {
     return [
@@ -211,20 +275,36 @@ function ViewProfile(data) {
         "<div class='container col-lg-3 col-md-3 col-sm-3'>" + // Profile information starts here
             ProfileInformation(data) +
             '</div>', //
-        "<div class='container col-lg-6 col-md-6 col-sm-6' id='chirp-box'><div>" + // Feed starts here
+        "<div class='container col-lg-5 col-md-4 col-sm-4 chirp-box'>" + // Feed starts here
             ChirperFeed(data) +
             '</div>',
-        "<div class='container col-lg-3 col-md-3 col-sm-3'>" + // Profile information starts here
+        "<div class='container col-lg-3 col-md-3 col-sm-3' id='chirp-box-margin'><div class='col-lg-12 chirp-box'><p id='recommendation'> You may also like:</p>" + // Profile information starts here
             Recommendations(data) +
-            '</div>', //
-
+            '</div></div>', //
         '</div>'
     ].join('');
 }
+var PAGE_DATA = {};
+function draw() {
+    $('#message').html('Name: ' + PAGE_DATA.chirper.name);
+}
+function user(username) {
+    $.get('https://bcca-chirper.herokuapp.com/api/' + username + '/')
+        .then(function handleFeedResponse(response) {
+            console.log(response);
+            PAGE_DATA = response;
+            draw();
+        })
+        .catch(function handleFeedReason(reason) {
+            console.log(reason);
+            $('#message').html("The username '" + username + "' is not valid");
+        });
+}
+function SignUpOrSignIn(data) {}
 function main() {
-    $('#app').html(
-        "<div class='jumbotron'><h1> Chirper </h1></div>" +
-            ViewProfile(PAGE_DATA)
-    );
+    // $('#app').html(
+    //     "<div class='jumbotron'><h1> Chirper </h1></div>" +
+    //         ViewProfile(PAGE_DATA)
+    // );
 }
 $(main);
