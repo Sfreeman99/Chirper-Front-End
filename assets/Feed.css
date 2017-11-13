@@ -20,7 +20,7 @@ p {
     padding: 10px 10px 10px 10px;
 }
 body {
-    background-color: #e6ecf0;
+    background-color: #74c2e1;
     /* background-color: #657786; */
 }
 #userpic {
@@ -91,4 +91,8 @@ p#recommendation {
 }
 #split {
     margin: 5px auto 5px auto;
+}
+
+#login {
+    margin: 18px 5px 18px 8px;
 }
