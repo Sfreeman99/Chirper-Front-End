@@ -16,12 +16,10 @@ function signup(name, username, email, password) {
         })
         .catch();
 }
-function getProfileInformation(username) {
-    $.get(
-        'https://bcca-chirper.herokuapp.com/api/' + username + '/'
-    ).then(function loaded(data) {
-        PAGE_DATA = data;
-    });
+function getProfileInformation(username, successFunc, failFunc) {
+    $.get('https://bcca-chirper.herokuapp.com/api/' + username + '/?page=')
+        .then(successFunc)
+        .catch(failFunc);
 }
 function login(username, password) {
     $.post(
@@ -33,8 +31,9 @@ function login(username, password) {
     )
         .then(function UserInformation(data) {
             window.localStorage.setItem('key', data.key);
-            getProfileInformation(username);
-            window.location = '../Feed?user=' + username + '/';
+            window.localStorage.setItem('User', username);
+            window.location = '../Feed/index.html#' + username;
+            // console.log(window.location.hash)
         })
         .catch(function Catch(response) {
             console.log(response);
@@ -43,3 +42,4 @@ function login(username, password) {
 var PAGE_DATA = {};
 exports.signup = signup;
 exports.login = login;
+exports.getProfileInformation = getProfileInformation;

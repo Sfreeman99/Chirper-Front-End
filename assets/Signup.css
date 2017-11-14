@@ -18,6 +18,16 @@ form.form-horizontal {
     min-height: 100px;
     background: linear-gradient(to right, white, lightblue);
     border-bottom-style: none;
+    /* Bottom box shadow configuration */
+    -webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.288);
+    -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.288);
+    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.288);
+    /* Static to the top of page */
+    /* position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1000px; */
 }
 .LoginErrorMessage {
     position: fixed;
