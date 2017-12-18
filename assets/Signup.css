@@ -23,11 +23,10 @@ form.form-horizontal {
     -moz-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.288);
     box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.288);
     /* Static to the top of page */
-    /* position: fixed;
-    left: 0;
+    /* overflow: hidden;
+    position: fixed;
     top: 0;
-    width: 100%;
-    z-index: 1000px; */
+    width: 100%; */
 }
 .LoginErrorMessage {
     position: fixed;

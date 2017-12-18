@@ -165,13 +165,14 @@ function ProfileInformation(data) {
         "<img src='" +
             hasImage(data['chirper']) +
             "' class='img-circle' id='userpic'>",
+        UploadImage(data['chirper']),
         '</div>', //
-        "<div class='col-lg-12 col-md-12 col-sm-12'><span><h3 id='name'><a id='name-color' href='https://twitter.com/" +
+        "<div class='col-lg-12 col-md-12 col-sm-12'><span><h3 id='name'><a id='name-color' href='#" +
             data['chirper']['username'] +
             "'>" +
             data['chirper']['name'] +
             '</a></h3></span>', //
-        "<span><h3 id='username-margin'><small><a id='username' href='https://twitter.com/" +
+        "<span><h3 id='username-margin'><small><a id='username' href='#" +
             data['chirper']['username'] +
             "'>@" +
             data['chirper']['username'] +
@@ -209,7 +210,9 @@ function ChirperFeed(data) {
                     feed['author']['name'] +
                     '</span>',
 
-                '<span class="chirper-username">@' +
+                '<span class="chirper-username"><a href="#' +
+                    feed.author.username +
+                    '">@' +
                     feed['author']['username'] +
                     '</span>',
                 ' <span class="chirper-date">' +
@@ -237,14 +240,16 @@ function hashTag(message) {
     }
     return phrase.join(' ');
 }
-function hasImage(data) {
-    if ('userpic' in data) {
-        return data.userpic;
-    } else if (!data.userpic) {
-        return 'http://way4sale.com/oc-content/plugins/profile_picture/no-user.png';
-    } else {
-        return 'http://way4sale.com/oc-content/plugins/profile_picture/no-user.png';
+function UploadImage(data) {
+    if (!data.userpic && !window.localStorage.getItem('UserPic')) {
+        return [
+            "<input id='pic' type='file' name='userpic' />",
+            "<input id='upload-pic' type='submit' value='upload'/>"
+        ].join('');
     }
+}
+function hasImage(data) {
+    return 'http://way4sale.com/oc-content/plugins/profile_picture/no-user.png';
 }
 function Chirp(data) {
     return [
@@ -309,13 +314,31 @@ function main() {
             $('#logout').click(function() {
                 window.localStorage.removeItem('key');
                 window.localStorage.removeItem('User');
+                window.localStorage.removeItem('UserPic');
                 window.location = '../Signup/index.html';
+            });
+            $('#home').click(function() {
+                event.preventDefault();
+                window.location.href =
+                    '#' + window.localStorage.getItem('User');
+                window.location.reload(true);
             });
             $('a').click(function(event) {
                 if ($(this)[0].hash[0] === '#') {
                     window.location.reload(true);
                 }
             });
+            $('#upload-pic').click(function() {
+                window.localStorage.setItem(
+                    'UserPic',
+                    'home/basecamp/Downloads/' +
+                        $('#pic')
+                            .val()
+                            .substr(13)
+                );
+                window.location.reload(true);
+            });
+
             $('#submit-chirp').click(function(event) {
                 event.preventDefault();
                 var key = window.localStorage.getItem('key');

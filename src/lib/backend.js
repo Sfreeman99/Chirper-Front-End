@@ -12,9 +12,14 @@ function signup(name, username, email, password) {
     )
         .then(function UserInformation(data) {
             window.localStorage.setItem('key', data.key);
-            window.location = '../Feed?user=' + username + '/';
+            window.localStorage.setItem('User', username);
+            // window.location = '../Feed/index.html#' + username;
+            login(username, password);
+            console.log('it worked');
         })
-        .catch();
+        .catch(function(response) {
+            console.log(response);
+        });
 }
 function getProfileInformation(username, successFunc, failFunc) {
     $.get('https://bcca-chirper.herokuapp.com/api/' + username + '/?page=')

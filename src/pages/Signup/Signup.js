@@ -106,8 +106,8 @@ function main() {
         event.preventDefault();
         backend.login(LoginUsername, LoginPassword);
     });
-    $('#submit').click(function(event) {
-        event.preventDefault();
+    $('#Sign-Up').click(function(event) {
+        // event.preventDefault();
         var name = $('#Name').val();
         var username = $('#UserName').val();
         var password = $('#Password').val();
@@ -116,6 +116,7 @@ function main() {
             event.preventDefault();
             showErrors(name, username, password);
         } else {
+            // event.preventDefault();
             backend.signup(name, username, email, password);
         }
     });
