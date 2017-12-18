@@ -116,7 +116,6 @@ function main() {
             event.preventDefault();
             showErrors(name, username, password);
         } else {
-            // event.preventDefault();
             backend.signup(name, username, email, password);
         }
     });

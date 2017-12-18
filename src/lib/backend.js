@@ -13,7 +13,6 @@ function signup(name, username, email, password) {
         .then(function UserInformation(data) {
             window.localStorage.setItem('key', data.key);
             window.localStorage.setItem('User', username);
-            // window.location = '../Feed/index.html#' + username;
             login(username, password);
             console.log('it worked');
         })
